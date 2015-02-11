@@ -121,29 +121,28 @@ class APIClient(object):
         if self.credentials.client_key is None or self.credentials.secret_key is None:
             raise GeneralError('Invalid Access Key.', 'The Access Key supplied is invalid.')
 
-        # Create a date for headers and the credential string
+        # Create a date for headers and the credential string.
         t = datetime.datetime.utcnow()
         usbldate = t.strftime('%a, %d %b %Y %H:%M:%S GMT')
         datestamp = t.strftime('%Y%m%d')  # Date w/o time, used in credential scope
         long_date = t.strftime('%Y%m%dT%H%M%SZ')
 
-        # Create canonical URI--the part of the URI from domain to query
+        # Create canonical URI--the part of the URI from domain to query.
         canonical_uri = scope
 
-        # Create the canonical query string. In this example (a GET request),
+        # Create the canonical query string.
         canonical_querystring = self.get_query_parameters()
 
-        # Create the canonical headers and signed headers
+        # Create the canonical headers and signed headers.
         canonical_headers = 'date:' + usbldate + '\n' + 'host:' + self.host + '\n'
 
-        # Create the list of signed headers
+        # Create the list of signed headers.
         signed_headers = 'date;host'
 
-        # Create payload hash (hash of the request body content)
-        # requests, the payload is an empty string ("").
+        # Create payload hash (hash of the request body content).
         payload_hash = hashlib.sha256('').hexdigest()
 
-        # Step 7: Combine elements to create create canonical request
+        # Combine elements to create canonical request.
         canonical_request = '{method}\n{uri}\n{query}\n{can_headers}\n{signed_headers}\n{hash}'.format(
             method=self.method,
             uri=canonical_uri,
@@ -153,7 +152,7 @@ class APIClient(object):
             hash=payload_hash
         )
 
-        # Match the algorithm to the hashing algorithm you use, either SHA-1 or
+        # Match the algorithm to the hashing algorithm you use
         algorithm = 'USBL1-HMAC-SHA256'
         credential_scope = datestamp + '/' + 'usbl1_request'
 
@@ -164,12 +163,13 @@ class APIClient(object):
             digest=hashlib.sha256(canonical_request).hexdigest(),
         )
 
-        # Create the signing key using the function defined above.
+        # Create the signing key.
         signing_key = self.get_signature_key(self.credentials.secret_key, datestamp)
 
-        # Sign the string_to_sign using the signing_key
+        # Sign the string_to_sign using the signing_key.
         signature = hmac.new(signing_key, (string_to_sign).encode('utf-8'), hashlib.sha256).hexdigest()
 
+        # Constrcut the authorization header.
         authorization_header = (
             '{algorithm} Credential={cred}/{cred_scope}, SignedHeaders={signed_headers}, Signature={signature}'
         ).format(
@@ -182,7 +182,7 @@ class APIClient(object):
 
         headers = {'date': usbldate, 'Authorization': authorization_header}
 
-        # ************* SEND THE REQUEST *************
+        # Send the request.
         request_url = self.host + scope + '?' + canonical_querystring
 
         r = requests.get(self.host_protocol + request_url, headers=headers)
@@ -197,9 +197,12 @@ class APIClient(object):
         buttons = self.send_signed_request('/live/website/button')
         return buttons
 
-    # Default value is '*' encoded as stated by RFC3986
     def get_feedback_items(self, button_id='%2A'):
-        """Send request to get data for feedback items."""
+        """Send request to get data for feedback items.
+
+        :param button_id: The button id. Default value is '*' encoded as stated by RFC3986.
+        :type button_id: str
+        """
         if button_id is None or button_id is '':
             raise GeneralError('invalid id', 'Invalid button ID')
         feedback_items = self.send_signed_request('/live/website/button/' + str(button_id) + '/feedback')
@@ -211,7 +214,11 @@ class APIClient(object):
         return campaigns
 
     def get_campaign_results(self, campaign_id):
-        """Send request to get campaign result data."""
+        """Send request to get campaign result data.
+
+        :param campaign_id: The campaign id.
+        :type campaign_id: str
+        """
         if campaign_id is None or campaign_id is '':
             raise GeneralError('invalid id', 'Invalid campaign ID')
         campaign_results = self.send_signed_request('/live/website/campaign/' + str(campaign_id) + '/results')
@@ -228,7 +235,7 @@ class APIClient(object):
     def item_iterator(self, iterator):
         """Get items using an iterator.
 
-        :param iterator: A `dict` that specifies the type and id of the iterator.
+        :param iterator: A `dict` that specifies the type of the iterator and the id of the resource.
         :type iterator: dict
 
         :returns: A `list` that contains the requested data.
