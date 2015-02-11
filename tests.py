@@ -48,8 +48,8 @@ class TestClient(TestCase):
     def test_client_constants(self):
         self.assertEqual(self.client.method, 'GET')
         self.assertEqual(self.client.host, 'data.usabilla.com')
-        self.assertEqual(self.client.hostProtocol, 'https://')
-        self.assertEqual(self.client.queryParameters, '')
+        self.assertEqual(self.client.host_protocol, 'https://')
+        self.assertIsNone(self.client.query_parameters)
 
     @unittest.skipIf(sys.version_info > (2, 7), "signature assertion not supported for this version")
     def test_sign_key(self):
