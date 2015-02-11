@@ -25,8 +25,8 @@ python setup.py install
 ```python
 >>> import usabilla as ub
 >>> clientApi = ub.APIClient('CLIENT-API-KEY', 'CLIENT-SECRET-KEY')
->>> clientApi.setQueryParameters({'limit' : 1})
->>> buttons = clientApi.getButtons()
+>>> clientApi.set_query_parameters({'limit' : 1})
+>>> buttons = clientApi.get_buttons()
 >>> print buttons
 ```
 
@@ -47,7 +47,7 @@ python setup.py install
 
 ###Iterators:
 
-When working with the <code>limit</code> parameters (default value is **100**) you can request resources using the <code>itemIterator()</code> function.
+When working with the <code>limit</code> parameters (default value is **100**) you can request resources using the <code>item_iterator()</code> function.
 Using the <code>hasMore</code> flag it will request items until the value of the flag is **False**.
 
 ##Example usage:
@@ -55,8 +55,8 @@ Using the <code>hasMore</code> flag it will request items until the value of the
 ```python
 >>> import usabilla as ub
 >>> clientApi = ub.APIClient('CLIENT-API-KEY', 'CLIENT-SECRET-KEY')
->>> clientApi.setQueryParameters({'limit' : 1})
->>> feedbackItems = clientApi.itemIterator({'type':'feedbackItems', 'id' : '8d73568ac2be'})
+>>> clientApi.set_query_parameters({'limit' : 1})
+>>> feedbackItems = clientApi.item_iterator({'type':'feedbackItems', 'id' : '8d73568ac2be'})
 >>> print feedbackItems
 ```
 
