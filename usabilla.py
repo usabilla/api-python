@@ -100,7 +100,7 @@ class APIClient(object):
 
     def get_query_parameters(self):
         """Get the query parameters."""
-        return self.query_parameteNone
+        return self.query_parameters
 
     def send_signed_request(self, scope):
         """Send the signed request to the API.
