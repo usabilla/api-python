@@ -206,6 +206,9 @@ class APIClient(object):
         """
         if button_id is None or button_id is '':
             raise GeneralError('invalid id', 'Invalid button ID')
+        if button_id == '*':
+            button_id = '%2A'
+            
         feedback_items = self.send_signed_request('/live/website/button/' + str(button_id) + '/feedback')
         return feedback_items
 
