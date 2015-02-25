@@ -25,6 +25,7 @@ import hashlib
 import hmac
 import requests
 import urllib3.request as urllib
+from collections import OrderedDict
 
 
 class Credentials(object):
@@ -96,7 +97,7 @@ class APIClient(object):
         :param parameters: A `dict` representing the query parameters to be used for the request.
         :type parameters: dict
         """
-        self.query_parameters = urllib.urlencode(parameters)
+        self.queryParameters = urllib.urlencode(OrderedDict(sorted(parameters.items())))
 
     def get_query_parameters(self):
         """Get the query parameters."""
