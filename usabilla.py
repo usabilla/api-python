@@ -78,7 +78,7 @@ class APIClient(object):
 
     def __init__(self, client_key, secret_key):
         """Initialize an APIClient object."""
-        self.query_parameters = None
+        self.query_parameters = ''
         self.credentials = Credentials(client_key=client_key, secret_key=secret_key)
 
     def sign(self, key, msg):
@@ -97,7 +97,7 @@ class APIClient(object):
         :param parameters: A `dict` representing the query parameters to be used for the request.
         :type parameters: dict
         """
-        self.queryParameters = urllib.urlencode(OrderedDict(sorted(parameters.items())))
+        self.query_parameters = urllib.urlencode(OrderedDict(sorted(parameters.items())))
 
     def get_query_parameters(self):
         """Get the query parameters."""
@@ -133,7 +133,7 @@ class APIClient(object):
 
         # Create the canonical query string.
         canonical_querystring = self.get_query_parameters()
-
+        
         # Create the canonical headers and signed headers.
         canonical_headers = 'date:' + usbldate + '\n' + 'host:' + self.host + '\n'
 
@@ -187,7 +187,7 @@ class APIClient(object):
         request_url = self.host + scope + '?' + canonical_querystring
 
         r = requests.get(self.host_protocol + request_url, headers=headers)
-
+        
         if r.status_code != 200:
             return r
         else:
@@ -246,12 +246,12 @@ class APIClient(object):
         :rtype: list
         """
         iterator_dispatcher = self.get_iterator_dispatcher()
-        hash_more = True
+        has_more = True
         items = []
-        while(hash_more):
+        while(has_more):
             try:
                 results = iterator_dispatcher[iterator['type']](iterator['id'])
-                hash_more = results['hashMore']
+                has_more = results['hasMore']
                 for item in results['items']:
                     items.append(item)
                 self.set_query_parameters({'since': results['lastTimestamp']})
