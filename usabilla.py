@@ -228,33 +228,39 @@ class APIClient(object):
         campaign_results = self.send_signed_request('/live/website/campaign/' + str(campaign_id) + '/results')
         return campaign_results
 
-    def get_iterator_dispatcher(self):
-        """Get the iterator dispatcher."""
+    def item_iterator(self, resource_group, resource_id):
+        """Get items using an iterator.
+
+        :param resource_group: A `string` that specifies the type of resources we want to iterate over iterator
+        :param resource_id: the id of the resource.
+
+        :type resource_group: str
+        :type resource_id: str
+
+        :returns: An `iterator` that yeilds the requested data.
+        :rtype: iterator
+        """
+        item_retriever = self._get_iterator_function(resource_group)
+        if item_retriever is None:
+            message = 'Cannot create iterator for resource group {}. Unknown group.'.format(resource_group)
+            raise GeneralError('No iterator for resource group', message)
+
+        has_more = True
+        while has_more:
+            try:
+                results = item_retriever(resource_id)
+                has_more = results['hasMore']
+                for item in results['items']:
+                    yield item
+                self.set_query_parameters({'since': results['lastTimestamp']})
+            except GeneralError, requests.HTTPError:
+                pass
+
+    def _get_iterator_function(self, resource_group):
+        """Get the item retriever for iterating through the resource_group."""
         return {
             'campaigns': self.get_campaigns,
             'feedback_items': self.get_feedback_items,
             'campaign_results': self.get_campaign_results,
-        }
+        }.get(resource_group, None)
 
-    def item_iterator(self, iterator):
-        """Get items using an iterator.
-
-        :param iterator: A `dict` that specifies the type of the iterator and the id of the resource.
-        :type iterator: dict
-
-        :returns: A `list` that contains the requested data.
-        :rtype: list
-        """
-        iterator_dispatcher = self.get_iterator_dispatcher()
-        has_more = True
-        items = []
-        while(has_more):
-            try:
-                results = iterator_dispatcher[iterator['type']](iterator['id'])
-                has_more = results['hasMore']
-                for item in results['items']:
-                    items.append(item)
-                self.set_query_parameters({'since': results['lastTimestamp']})
-            except:
-                return results
-        return items
