@@ -253,7 +253,7 @@ class APIClient(object):
                 for item in results['items']:
                     yield item
                 self.set_query_parameters({'since': results['lastTimestamp']})
-            except GeneralError, requests.HTTPError:
+            except:
                 pass
 
     def _get_iterator_function(self, resource_group):
