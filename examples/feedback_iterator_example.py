@@ -11,6 +11,6 @@ if __name__ == '__main__':
     client_api.set_query_parameters({'limit': 1})
 
     # Get the feedback items for a specific button
-    feedback_items = client_api.item_iterator({'type': 'feedback_items', 'id': 'BUTTON-ID'})
+    feedback_items = client_api.item_iterator('feedback_items', 'BUTTON-ID')
 
-    pprint.PrettyPrinter(indent=4).pprint(feedback_items)
+    pprint.PrettyPrinter(indent=4).pprint([item for item in feedback_items])
