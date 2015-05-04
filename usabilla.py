@@ -25,6 +25,7 @@ import hashlib
 import hmac
 import requests
 import urllib3.request as urllib
+
 from collections import OrderedDict
 
 
@@ -72,6 +73,52 @@ class APIClient(object):
 
     """
 
+    resources = {
+    'scopes' : {
+            'live': {
+                'products': {
+                    'website': {
+                        'resources' : {
+                            'button': '/button',
+                            'feedback': '/button/:id/feedback',
+                            'campaign': '/campaign',
+                            'campaign_result': '/campaign/:id/result',
+                            'stats': '/campaign/:id/stats'
+                        }
+                    },
+                    'email': {
+                        'resources' : {
+                            'button': '/button',
+                            'feedback': '/button/:id/feedback'
+                        }
+                    },
+                    'apps': {
+                        'resources' : {
+                            'app': '',
+                            'feedback': '/:id/feedback'
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    """ Scope constants """
+    SCOPE_LIVE = 'live'
+    
+    """ Product contants """
+    PRODUCT_WEBSITES = 'website'
+    PRODUCT_EMAIL = 'email'
+    PRODUCT_APPS = 'apps'
+    
+    """ Resource contants """
+    RESOURCE_FEEDBACK = 'feedback'
+    RESOURCE_APP = 'app'
+    RESOURCE_BUTTON = 'button'
+    RESOURCE_CAMPAIGN = 'campaign'    
+    RESOURCE_CAMPAIGN_RESULT = 'campaign_results'
+    RESOURCE_CAMPAIGN_STATS = 'stats'
+        
     method = 'GET'
     host = 'data.usabilla.com'
     host_protocol = 'https://'
@@ -83,12 +130,12 @@ class APIClient(object):
 
     def sign(self, key, msg):
         """Get the digest of the message using the specified key."""
-        return hmac.new(key, msg.encode('utf-8'), hashlib.sha256).digest()
+        return hmac.new(key, msg, hashlib.sha256).digest()
 
     def get_signature_key(self, key, long_date):
         """Get the signature key."""
-        k_date = self.sign(('USBL1' + key).encode('utf-8'), long_date)
-        k_signing = self.sign(k_date, 'usbl1_request')
+        k_date = self.sign(('USBL1' + key).encode('utf-8'), long_date.encode('utf-8'))
+        k_signing = self.sign(k_date, 'usbl1_request'.encode('utf-8'))
         return k_signing
 
     def set_query_parameters(self, parameters):
@@ -97,6 +144,7 @@ class APIClient(object):
         :param parameters: A `dict` representing the query parameters to be used for the request.
         :type parameters: dict
         """
+        
         self.query_parameters = urllib.urlencode(OrderedDict(sorted(parameters.items())))
 
     def get_query_parameters(self):
@@ -117,7 +165,7 @@ class APIClient(object):
         :type scope: str
 
         :returns: A `dict` of the data.
-        :rtype: dict
+        :rtype: dict 
         """
         if self.credentials.client_key is None or self.credentials.secret_key is None:
             raise GeneralError('Invalid Access Key.', 'The Access Key supplied is invalid.')
@@ -133,7 +181,7 @@ class APIClient(object):
 
         # Create the canonical query string.
         canonical_querystring = self.get_query_parameters()
-        
+
         # Create the canonical headers and signed headers.
         canonical_headers = 'date:' + usbldate + '\n' + 'host:' + self.host + '\n'
 
@@ -141,8 +189,8 @@ class APIClient(object):
         signed_headers = 'date;host'
 
         # Create payload hash (hash of the request body content).
-        payload_hash = hashlib.sha256('').hexdigest()
-
+        payload_hash = hashlib.sha256(''.encode('utf-8')).hexdigest()
+        
         # Combine elements to create canonical request.
         canonical_request = '{method}\n{uri}\n{query}\n{can_headers}\n{signed_headers}\n{hash}'.format(
             method=self.method,
@@ -161,7 +209,7 @@ class APIClient(object):
             algorithm=algorithm,
             long_date=long_date,
             credential_scope=credential_scope,
-            digest=hashlib.sha256(canonical_request).hexdigest(),
+            digest=hashlib.sha256(canonical_request.encode('utf-8')).hexdigest(),
         )
 
         # Create the signing key.
@@ -185,82 +233,110 @@ class APIClient(object):
 
         # Send the request.
         request_url = self.host + scope + '?' + canonical_querystring
-
+        
         r = requests.get(self.host_protocol + request_url, headers=headers)
         
         if r.status_code != 200:
             return r
         else:
             return r.json()
-
-    def get_buttons(self, optional=None):
-        """Send request to get button data."""
-        buttons = self.send_signed_request('/live/website/button')
-        return buttons
-
-    def get_feedback_items(self, button_id='%2A'):
-        """Send request to get data for feedback items.
-
-        :param button_id: The button id. Default value is '*' encoded as stated by RFC3986.
-        :type button_id: str
-        """
-        if button_id is None or button_id is '':
-            raise GeneralError('invalid id', 'Invalid button ID')
-        if button_id == '*':
-            button_id = '%2A'
             
-        feedback_items = self.send_signed_request('/live/website/button/' + str(button_id) + '/feedback')
-        return feedback_items
 
-    def get_campaigns(self, optional=None):
-        """Send request to get campaign data."""
-        campaigns = self.send_signed_request('/live/website/campaign')
-        return campaigns
-
-    def get_campaign_results(self, campaign_id):
-        """Send request to get campaign result data.
-
-        :param campaign_id: The campaign id.
-        :type campaign_id: str
+    def check_resource_validity(self,scope,product,resource):
+        """Checks whether the resource exists 
+        
+        :param scope: A `string` that specifies the resource scope
+        :param product: A `string` that specifies the product type
+        :param resource: A `string` that specifies the resource type
+        
+        :type scope: str
+        :type product: str
+        :type resource: str
+        
+        :returns: An `string` that represents the resource request url
+        :rtype: string
         """
-        if campaign_id is None or campaign_id is '':
-            raise GeneralError('invalid id', 'Invalid campaign ID')
-        campaign_results = self.send_signed_request('/live/website/campaign/' + str(campaign_id) + '/results')
-        return campaign_results
-
-    def item_iterator(self, resource_group, resource_id):
-        """Get items using an iterator.
-
-        :param resource_group: A `string` that specifies the type of resources we want to iterate over iterator
-        :param resource_id: the id of the resource.
-
-        :type resource_group: str
+        if scope not in self.resources['scopes'].keys():
+            raise GeneralError('invalid scope', 'Invalid scope name')
+        if product not in self.resources['scopes'][scope]['products'].keys():
+            raise GeneralError('invalid product', 'Invalid product name')            
+        if resource not in self.resources['scopes'][scope]['products'][product]['resources'].keys():
+            raise GeneralError('invalid resource', 'Invalid resource name')    
+        
+        url = '/' + scope + '/' + product + self.resources['scopes'][scope]['products'][product]['resources'][resource]
+        
+        return url
+        
+    def handle_id(self,url,resource_id):
+        """Replaces the :id pattern in the url
+        
+        :param url: A `string` that specifies the resource request url
+        :param resource_id: A `string` that specifies the resource id
+        
+        :type url: str
         :type resource_id: str
-
-        :returns: An `iterator` that yeilds the requested data.
-        :rtype: iterator
+        
+        :returns: An `string` that represents the resource request url
+        :rtype: string
         """
-        item_retriever = self._get_iterator_function(resource_group)
-        if item_retriever is None:
-            message = 'Cannot create iterator for resource group {}. Unknown group.'.format(resource_group)
-            raise GeneralError('No iterator for resource group', message)
-
+        if resource_id is not None:
+            if resource_id == '':
+                raise GeneralError('invalid id', 'Invalid resource ID')
+            if resource_id == '*':
+               resource_id = '%2A'
+    
+            url = url.replace(':id', str(resource_id))
+           
+        return url
+            
+    def item_iterator(self, url):
+        """Get items using an iterator.
+        
+        :param url: A `string` that specifies the resource request url
+        
+        :type url: str
+        
+        :returns: An `generator` that yeilds the requested data.
+        :rtype: generator
+        """
         has_more = True
+        results = self.send_signed_request(url)
         while has_more:
             try:
-                results = item_retriever(resource_id)
+                results = self.send_signed_request(url)
                 has_more = results['hasMore']
                 for item in results['items']:
                     yield item
                 self.set_query_parameters({'since': results['lastTimestamp']})
             except:
                 pass
+        
+        
+    def get_resource(self, scope, product, resource, resource_id=None, iterate=False):
+        """Retrieves resources of the specified type
+        
+        :param scope: A `string` that specifies the resource scope
+        :param product: A `string` that specifies the product type
+        :param resource: A `string` that specifies the resource type
+        :param resource_id: A `string` that specifies the resource id
+        :param iterate: A `boolean` that specifies whether the you want to use an iterator    
+        
+        :type scope: str
+        :type product: str
+        :type resource: str
+        :type resource_id: str
+        :type iterate: bool        
+        
+        :returns: An `generator` that yeilds the requested data or a single resource
+        :rtype: generator or single resource
+        """
+        url = self.handle_id(self.check_resource_validity(scope, product, resource), resource_id)
+                
+        if iterate:
+            return self.item_iterator(url)
+        else:
+            return self.send_signed_request(url) 
 
-    def _get_iterator_function(self, resource_group):
-        """Get the item retriever for iterating through the resource_group."""
-        return {
-            'campaigns': self.get_campaigns,
-            'feedback_items': self.get_feedback_items,
-            'campaign_results': self.get_campaign_results,
-        }.get(resource_group, None)
 
+    
+    

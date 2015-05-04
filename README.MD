@@ -3,15 +3,30 @@
 [![Build Status](https://travis-ci.org/usabilla/api-python.svg?branch=master)](https://travis-ci.org/usabilla/api-python)
 
 The Usabilla Python client allows users to access data from their Usabilla accounts.
-It makes use of the API to request the following resource items:
+It makes use of the API to request the following products and resources:
 
+Live for Websites
 	- Buttons
 	- Feedback items
 	- Campaign
 	- Campaign results
 
+Live for Email
+  - Buttons
+  - Feedback items
+
+Live for Apps
+  - Apps
+  - Feedback items  
+
 For more information on resources, authorization and available API calls, please visit out [documentation](https://usabilla.com/api).
 
+Changes in version 1.1
+
+Resources are now retrieved by providing the following:
+  - A scope
+  - A product name
+  - A resource type
 
 # Installation:
 Requires Python 2.7. (Need Collections.OrderedDict)
@@ -24,9 +39,9 @@ python setup.py install
 ## sample command:
 ```python
 >>> import usabilla as ub
->>> clientApi = ub.APIClient('CLIENT-API-KEY', 'CLIENT-SECRET-KEY')
->>> clientApi.set_query_parameters({'limit' : 1})
->>> buttons = clientApi.get_buttons()
+>>> api = ub.APIClient('CLIENT-API-KEY', 'CLIENT-SECRET-KEY')
+>>> api.set_query_parameters({'limit' : 1})
+>>> buttons = api.get_resource(api.SCOPE_LIVE, api.PRODUCT_WEBSITES,api.RESOURCE_BUTTON)
 >>> print buttons
 ```
 
@@ -56,9 +71,9 @@ traverses these pages for you and yields each result in the current page before 
 ```python
 >>> import usabilla as ub
 >>> import json
->>> clientApi = ub.APIClient('CLIENT-API-KEY', 'CLIENT-SECRET-KEY')
->>> clientApi.set_query_parameters({'limit' : 1})
->>> feedbackItems = clientApi.item_iterator('feedback_items', '8d73568ac2be')
+>>> api = ub.APIClient('CLIENT-API-KEY', 'CLIENT-SECRET-KEY')
+>>> api.set_query_parameters({'limit' : 1})
+>>> feedbackItems = api.get_resource(api.SCOPE_LIVE, api.PRODUCT_WEBSITES,api.RESOURCE_FEEDBACK,'*',iterate=True)
 >>> print json.dumps([item for item in feedbackItems], indent=4)
 ```
 

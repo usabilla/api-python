@@ -7,6 +7,10 @@ import usabilla as ub
 from unittest import TestCase, main as unittest_main
 
 
+import logging
+ 
+logging.basicConfig(level=logging.DEBUG)
+
 class TestCredentials(TestCase):
 
     def setUp(self):
@@ -51,29 +55,25 @@ class TestClient(TestCase):
         self.assertEqual(self.client.host_protocol, 'https://')
         self.assertEqual('',self.client.query_parameters)
 
-    @unittest.skipIf(sys.version_info > (2, 7), "signature assertion not supported for this version")
-    def test_sign_key(self):
-        signed_key = self.client.sign(self.secret_key, 'usbl1_request')
-        self.assertEqual(signed_key, '&-\x88\x80Z9\xe8Pnvx\xe4S\xeeZ\x9fG\xc5\xf7g\x11|\xc1\xaa~q(\xef\xaf\x95\xc0\xac')
 
-    @unittest.skipIf(sys.version_info > (2, 7), "signature assertion not supported for this version")
+    def test_sign_key(self):
+        signed_key = self.client.sign(self.secret_key.encode('utf-8'), 'usbl1_request'.encode('utf-8'))
+        self.assertEqual(signed_key,  b"&-\x88\x80Z9\xe8Pnvx\xe4S\xeeZ\x9fG\xc5\xf7g\x11|\xc1\xaa~q(\xef\xaf\x95\xc0\xac")
+
+
     def test_get_signature_key(self):
         datestamp = '20150115'
-        signing_key = self.client.getSignatureKey(self.secret_key, datestamp)
-        self.assertEqual(
-            signing_key, '\x15\x8d\xd7U\xceG\xdeH\x8aHwU\xf5qg\xae\xd4Z\x19`\xedM\x80\x87\x97V\xbf\xe9pw\xaa\xae')
+        signing_key = self.client.get_signature_key(self.secret_key, datestamp)
+        self.assertEqual(signing_key, b"\x15\x8d\xd7U\xceG\xdeH\x8aHwU\xf5qg\xae\xd4Z\x19`\xedM\x80\x87\x97V\xbf\xe9pw\xaa\xae")
 
-    @unittest.skipIf(sys.version_info > (2, 7), "query parameter order different for urllib3.")
+
     def test_query_parameters(self):
         params = {'limit': 1}
-        self.client.setQueryParameters(params)
-        self.assertEqual(self.client.queryParameters, 'limit=1')
+        self.client.set_query_parameters(params)
+        self.assertEqual(self.client.get_query_parameters(), 'limit=1')
         params = {'limit': 1, 'since': 1235454}
-        self.client.setQueryParameters(params)
-        self.assertEqual(self.client.queryParameters, 'since=1235454&limit=1')
-        params = ub.urllib.urlencode(params)
-        self.assertEqual(self.client.getQueryParameters(), params)
-
+        self.client.set_query_parameters(params)
+        self.assertEqual(self.client.get_query_parameters(), 'limit=1&since=1235454')
 
 if __name__ == '__main__':
     unittest_main()
