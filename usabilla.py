@@ -77,7 +77,7 @@ class APIClient(object):
     'scopes' : {
             'live': {
                 'products': {
-                    'website': {
+                    'websites': {
                         'resources' : {
                             'button': '/button',
                             'feedback': '/button/:id/feedback',
@@ -107,7 +107,7 @@ class APIClient(object):
     SCOPE_LIVE = 'live'
     
     """ Product contants """
-    PRODUCT_WEBSITES = 'website'
+    PRODUCT_WEBSITES = 'websites'
     PRODUCT_EMAIL = 'email'
     PRODUCT_APPS = 'apps'
     
@@ -116,7 +116,7 @@ class APIClient(object):
     RESOURCE_APP = 'app'
     RESOURCE_BUTTON = 'button'
     RESOURCE_CAMPAIGN = 'campaign'    
-    RESOURCE_CAMPAIGN_RESULT = 'campaign_results'
+    RESOURCE_CAMPAIGN_RESULT = 'campaign_result'
     RESOURCE_CAMPAIGN_STATS = 'stats'
         
     method = 'GET'
@@ -337,6 +337,11 @@ class APIClient(object):
         else:
             return self.send_signed_request(url) 
 
+
+    
+
+  
+    
 
     
     
