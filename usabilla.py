@@ -230,12 +230,12 @@ class APIClient(object):
         )
 
         headers = {'date': usbldate, 'Authorization': authorization_header}
-
-        # Send the request.
-        request_url = self.host + scope + '?' + canonical_querystring
         
+        # Send the request.
+        request_url = self.host + scope + '?' + canonical_querystring        
         r = requests.get(self.host_protocol + request_url, headers=headers)
         
+       
         if r.status_code != 200:
             return r
         else:
@@ -300,7 +300,6 @@ class APIClient(object):
         :rtype: generator
         """
         has_more = True
-        results = self.send_signed_request(url)
         while has_more:
             try:
                 results = self.send_signed_request(url)
@@ -309,7 +308,7 @@ class APIClient(object):
                     yield item
                 self.set_query_parameters({'since': results['lastTimestamp']})
             except:
-                pass
+                return
         
         
     def get_resource(self, scope, product, resource, resource_id=None, iterate=False):
@@ -335,13 +334,7 @@ class APIClient(object):
         if iterate:
             return self.item_iterator(url)
         else:
-            return self.send_signed_request(url) 
+            return self.send_signed_request(url)
 
 
-    
-
-  
-    
-
-    
     
