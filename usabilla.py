@@ -82,7 +82,7 @@ class APIClient(object):
                             'button': '/button',
                             'feedback': '/button/:id/feedback',
                             'campaign': '/campaign',
-                            'campaign_result': '/campaign/:id/result',
+                            'campaign_result': '/campaign/:id/results',
                             'stats': '/campaign/:id/stats'
                         }
                     },
