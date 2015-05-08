@@ -5,19 +5,20 @@
 The Usabilla Python client allows users to access data from their Usabilla accounts.
 It makes use of the API to request the following products and resources:
 
-Live for Websites
-	- Buttons
-	- Feedback items
-	- Campaign
-	- Campaign results
+###Live for Websites
+- Buttons
+- Feedback items
+- Campaign
+- Campaign results
+- Campaign statistics
 
-Live for Email
+###Live for Email
   - Buttons
   - Feedback items
 
-Live for Apps
+###Live for Apps
   - Apps
-  - Feedback items  
+  - Feedback items 
 
 For more information on resources, authorization and available API calls, please visit out [documentation](https://usabilla.com/api).
 
