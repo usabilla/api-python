@@ -8,7 +8,7 @@ It makes use of the API to request the following products and resources:
 ###Live for Websites
 - Buttons
 - Feedback items
-- Campaign
+- Campaigns
 - Campaign results
 - Campaign statistics
 
