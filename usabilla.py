@@ -83,7 +83,9 @@ class APIClient(object):
                             'feedback': '/button/:id/feedback',
                             'campaign': '/campaign',
                             'campaign_result': '/campaign/:id/results',
-                            'stats': '/campaign/:id/stats'
+                            'campaign_stats': '/campaign/:id/stats',
+                            'inpage': '/inpage',
+                            'inpage_result': '/inpage/:id/feedback'
                         }
                     },
                     'email': {
@@ -117,8 +119,10 @@ class APIClient(object):
     RESOURCE_BUTTON = 'button'
     RESOURCE_CAMPAIGN = 'campaign'    
     RESOURCE_CAMPAIGN_RESULT = 'campaign_result'
-    RESOURCE_CAMPAIGN_STATS = 'stats'
-        
+    RESOURCE_CAMPAIGN_STATS = 'campaign_stats'
+    RESOURCE_INPAGE = 'inpage'    
+    RESOURCE_INPAGE_RESULT = 'inpage_result'
+
     method = 'GET'
     host = 'data.usabilla.com'
     host_protocol = 'https://'
