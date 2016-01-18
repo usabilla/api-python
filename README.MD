@@ -11,6 +11,8 @@ It makes use of the API to request the following products and resources:
 - Campaigns
 - Campaign results
 - Campaign statistics
+- In-Page widgets
+- In-Page feedback
 
 ###Live for Email
   - Buttons
@@ -22,8 +24,10 @@ It makes use of the API to request the following products and resources:
 
 For more information on resources, authorization and available API calls, please visit out [documentation](https://usabilla.com/api).
 
-Changes in version 1.1
+Changes in version 1.2
+- Added In-Page resource
 
+Changes in version 1.1
 Resources are now retrieved by providing the following:
   - A scope
   - A product name

@@ -1,6 +1,6 @@
 """Usabilla API Python Client."""
 
-# Copyright (c) 2015 Usabilla.com
+# Copyright (c) 2016 Usabilla.com
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the
