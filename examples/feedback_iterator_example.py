@@ -5,7 +5,7 @@ import usabilla as ub
 
 if __name__ == '__main__':
     # Create an API client with client and secret keys
-    api = ub.APIClient('CLIENT-API-KEY', 'CLIENT-SECRET-KEY')
+    api = ub.APIClient('YOUR-ACCESS-KEY', 'YOUR-SECRET-KEY')
 
     # Set the limit of feedback items to retrieve to 1
     api.set_query_parameters({'limit': 1})

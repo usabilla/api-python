@@ -8,7 +8,7 @@ from unittest import TestCase, main as unittest_main
 
 
 import logging
- 
+
 logging.basicConfig(level=logging.DEBUG)
 
 class TestCredentials(TestCase):
