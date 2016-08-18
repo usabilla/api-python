@@ -12,7 +12,7 @@ setup(
     license='MIT',
     install_requires=['urllib3', 'requests'],
     packages=find_packages(),
-    py_modules=['usabilla-api'],
+    py_modules=['usabilla'],
     author='Usabilla',
     author_email='development@usabilla.com',
     url='https://github.com/usabilla/api-python',
