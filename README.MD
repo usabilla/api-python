@@ -52,7 +52,7 @@ traverses these pages for you and yields each result in the current page before 
 ```python
 >>> import usabilla as ub
 >>> import json
->>> api = ub.APIClient('CLIENT-API-KEY', 'CLIENT-SECRET-KEY')
+>>> api = ub.APIClient('YOUR-ACCESS-KEY', 'YOUR-SECRET-KEY')
 >>> api.set_query_parameters({'limit' : 1})
 >>> feedbackItems = api.get_resource(api.SCOPE_LIVE, api.PRODUCT_WEBSITES,api.RESOURCE_FEEDBACK,'*',iterate=True)
 >>> print json.dumps([item for item in feedbackItems], indent=4)
