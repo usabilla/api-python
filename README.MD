@@ -35,25 +35,10 @@ pip install usabilla-api
 # Buttons example:
 ```python
 >>> import usabilla as ub
->>> api = ub.APIClient('CLIENT-API-KEY', 'CLIENT-SECRET-KEY')
+>>> api = ub.APIClient('YOUR-ACCESS-KEY', 'YOUR-SECRET-KEY')
 >>> api.set_query_parameters({'limit' : 1})
 >>> buttons = api.get_resource(api.SCOPE_LIVE, api.PRODUCT_WEBSITES,api.RESOURCE_BUTTON)
 >>> print buttons
-```
-
-### Output
-```json
-{
-  "count": 1,
-  "items": [
-    {
-      "_id" : "8d73568ac2be",
-      "name" : "My button",
-    }
-  ],
-  "hasMore": true,
-  "lastTimestamp": 1421232571909752
-}
 ```
 
 ### Iterators
@@ -74,33 +59,3 @@ traverses these pages for you and yields each result in the current page before 
 ```
 
 Where <code>id</code> is the button id from which the feedback originates.
-
-### Output
-```json
-{
-  "id" : "5499612ec4698839368b4573",
-  "userAgent" : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36",
-  "comment" : "A random comment.",
-  "location" : "Amsterdam, Netherlands",
-  "date" : "2014-01-15T19:48:06.003Z",
-  "custom" : {
-      "form_name" : "form1"
-  },
-  "email" : "dev@usabilla",
-  "htmlSnippet" : "<a href=\"#\">An anchor element</a>",
-  "image" : "http://usabilla-feedback-dev.s3.amazonaws.com/5499612ec4698839368b4573/detail",
-  "labels" : [
-      "label 1",
-      "label 2"
-  ],
-  "nps" : 10,
-  "publicUrl" : "http://usabilla.dev/feedback/item/a5cadaf3febf44393401a4be3ebbbf155d9f8d2c",
-  "rating" : 5,
-  "buttonId" : "8d73568ac2be",
-  "tags" : [
-      "interesting",
-      "unattractive"
-  ],
-  "url" : "http://usabilla.com/member/live/site/8d73568ac2be"
-}
-```
