@@ -11,8 +11,8 @@ setup(
     install_requires=['urllib3', 'requests'],
     packages=find_packages(),
     py_modules=['usabilla'],
-    author='George V.',
-    author_email='george@usabilla.com',
-    url='http://usabilla.com/api',
+    author='Usabilla',
+    author_email='development@usabilla.com',
+    url='https://github.com/usabilla/api-python',
     test_suite='tests'
 )
