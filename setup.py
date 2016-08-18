@@ -3,9 +3,11 @@ try:
 except ImportError:
     from distutils.core import setup
 
+VERSION = '1.2.1'
+
 setup(
     name='usabilla',
-    version='1.2.1',
+    version=VERSION,
     description="Python client for Usabilla API",
     license='MIT',
     install_requires=['urllib3', 'requests'],
@@ -14,5 +16,6 @@ setup(
     author='Usabilla',
     author_email='development@usabilla.com',
     url='https://github.com/usabilla/api-python',
+    download_url='https://github.com/usabilla/api-python/tarball/%s' % VERSION,
     test_suite='tests'
 )
