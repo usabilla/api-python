@@ -25,10 +25,11 @@ It makes use of the API to request the following products and resources:
 For more information on resources, authorization and available API calls, please visit out [documentation](https://usabilla.com/api).
 
 # Installation:
-Requires Python 2.7. (Need Collections.OrderedDict)
+
+Requires Python 2.7
 
 ```bash
-python setup.py install
+pip install usabilla
 ```
 
 # Buttons example:

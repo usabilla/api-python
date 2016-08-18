@@ -5,7 +5,7 @@ except ImportError:
 
 setup(
     name='usabilla',
-    version='1.1',
+    version='1.2.1',
     description="Python client for Usabilla API",
     license='MIT',
     install_requires=['urllib3', 'requests'],
