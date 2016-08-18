@@ -6,13 +6,13 @@ except ImportError:
 VERSION = '1.2.1'
 
 setup(
-    name='usabilla',
+    name='usabilla-api',
     version=VERSION,
     description="Python client for Usabilla API",
     license='MIT',
     install_requires=['urllib3', 'requests'],
     packages=find_packages(),
-    py_modules=['usabilla'],
+    py_modules=['usabilla-api'],
     author='Usabilla',
     author_email='development@usabilla.com',
     url='https://github.com/usabilla/api-python',

@@ -29,7 +29,7 @@ For more information on resources, authorization and available API calls, please
 Requires Python 2.7
 
 ```bash
-pip install usabilla
+pip install usabilla-api
 ```
 
 # Buttons example:
