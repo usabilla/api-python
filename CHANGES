@@ -11,6 +11,7 @@ Version 1.2.0
 Version 1.1.0
 -------------
 
-- A scope
-- A product name
-- A resource type
+- Resources are now retrieved by providing the following:
+	- A scope
+	- A product name
+	- A resource type
