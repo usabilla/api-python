@@ -11,7 +11,7 @@ deploy:
   provider: pypi
   user: usabilla
   password:
-    secure: "GZSMtc3Srg2rkfuJJAqKLPTrN6ftrX+qTYwDGbhsWTuB5ORtfxvUDX8PfuJBtR9nbO60F16wRUYQ4SziGftvnS+mFvAeSVsLbs5plnrY3cnwTM8H5Ixp9q0+BUHSQ6YWeZnDkJSaSOH9+0MbHqYmP6L7ExOo1OYQ4D7yAQHCNmI="
+    secure: "SuRG0UWRDERbvEhVNfwKl2TZqzD9DVwsA8oZAOcbElVKtJWqzynumlp+/u/DIALD5FO/tNNJ90d4RN3QD/K3EJ5wOowe41LxvVW78ixaaT/PXqFeyrDJxdQu4GdfZhVN70yM2JgBBqWaLJo7atZl2hByi2mFCm5jD+gKPf8bNt0="
   on:
     tags: true
     repo: usabilla/api-python
