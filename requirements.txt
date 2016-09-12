@@ -1,2 +1,7 @@
-requests>=2.5.0
-urllib3
+coverage==4.0.3
+python-coveralls==2.7.0
+PyYAML==3.12
+requests==2.11.1
+sh==1.11
+six==1.10.0
+urllib3==1.17

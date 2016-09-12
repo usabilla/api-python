@@ -1,6 +1,8 @@
 ##Usabilla API - Python Client
 
 [![Build Status](https://travis-ci.org/usabilla/api-python.svg?branch=master)](https://travis-ci.org/usabilla/api-python)
+[![PyPI version](https://badge.fury.io/py/usabilla-api.svg)](https://badge.fury.io/py/usabilla-api)
+[![Coverage Status](https://coveralls.io/repos/github/usabilla/api-python/badge.svg?branch=master)](https://coveralls.io/github/usabilla/api-python?branch=master)
 
 The Usabilla Python client allows users to access data from their Usabilla accounts.
 It makes use of the API to request the following products and resources:
