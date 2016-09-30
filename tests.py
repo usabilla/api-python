@@ -87,5 +87,6 @@ class TestClient(TestCase):
         self.client.set_query_parameters(params)
         self.assertEqual(self.client.get_query_parameters(), 'limit=1&since=1235454')
 
+
 if __name__ == '__main__':
     unittest_main()
