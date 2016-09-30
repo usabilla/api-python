@@ -3,10 +3,15 @@ Changelog
 
 Here you find a full list of changes.
 
+Version 1.2.2
+-------------
+
+- Automatically deploy new versions to PyPI
+
 Version 1.2.1
 -------------
 
-- Add usabilla to PyPi
+- Add usabilla to PyPI
 
 Version 1.2.0
 -------------
