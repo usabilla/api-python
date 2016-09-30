@@ -40,6 +40,18 @@ class TestCredentials(TestCase):
             ub.Credentials(2, '')
 
 
+class TestGeneralError(TestCase):
+
+    def setUp(self):
+        self.error = ub.GeneralError('type', 'message')
+
+    def test_str(self):
+        self.assertEqual(str(self.error), 'type (message)')
+
+    def test_repr(self):
+        self.assertEqual(repr(self.error), 'GeneralError(type=type)')
+
+
 class TestClient(TestCase):
 
     def setUp(self):
