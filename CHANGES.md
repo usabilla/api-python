@@ -3,6 +3,11 @@ Changelog
 
 Here you find a full list of changes.
 
+Version 1.2.3
+-------------
+
+- Increase the test coverage
+
 Version 1.2.2
 -------------
 
