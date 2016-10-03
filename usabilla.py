@@ -1,5 +1,3 @@
-"""Usabilla API Python Client."""
-
 # Copyright (c) 2016 Usabilla.com
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
@@ -271,7 +269,7 @@ class APIClient(object):
 
         return url
 
-    def handle_id(self,url,resource_id):
+    def handle_id(self, url, resource_id):
         """Replaces the :id pattern in the url
 
         :param url: A `string` that specifies the resource request url

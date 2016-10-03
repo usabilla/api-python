@@ -1,9 +1,8 @@
-"""Unit tests for the Usabilla API."""
-
 import sys
 import unittest
 import usabilla as ub
 
+from mock import Mock
 from unittest import TestCase, main as unittest_main
 
 
@@ -95,6 +94,37 @@ class TestClient(TestCase):
         with self.assertRaises(ub.GeneralError):
             self.client.check_resource_validity('live', 'websites', 'nonexisting')
         self.assertEqual(self.client.check_resource_validity('live', 'websites', 'button'), '/live/websites/button')
+
+    def test_handle_id(self):
+        url = '/live/websites/button/:id/feedback'
+        with self.assertRaises(ub.GeneralError):
+            self.client.handle_id(url, '')
+        self.assertEqual(self.client.handle_id(url, '*'), '/live/websites/button/%2A/feedback')
+        self.assertEqual(self.client.handle_id(url, 42), '/live/websites/button/42/feedback')
+
+    def test_item_iterator(self):
+        items = ['one', 'two', 'three', 'four']
+        has_more = {'hasMore': True, 'items': items[:2], 'lastTimestamp': 1400000000001}
+        no_more = {'hasMore': False, 'items': items[2:], 'lastTimestamp': 1400000000002}
+        self.client.set_query_parameters = Mock()
+        self.client.send_signed_request = Mock(side_effect=[has_more, no_more])
+        index = 0
+        for item in self.client.item_iterator('/some/url'):
+            self.assertEqual(item, items[index])
+            index += 1
+        self.client.set_query_parameters.assert_called_with({'since': 1400000000002})
+        self.assertEqual(self.client.send_signed_request.call_count, 2)
+        self.client.send_signed_request.side_effect = ub.GeneralError('mocked', 'error')
+        for item in self.client.item_iterator('/some/url'):
+            raise ub.GeneralError('should not', 'come here')
+
+    def test_get_resource(self):
+        self.client.item_iterator = Mock()
+        self.client.send_signed_request = Mock()
+        self.client.get_resource('live', 'websites', 'feedback', 42)
+        self.client.send_signed_request.assert_called_with('/live/websites/button/42/feedback')
+        self.client.get_resource('live', 'websites', 'button', None, True)
+        self.client.item_iterator.assert_called_with('/live/websites/button')
 
 
 if __name__ == '__main__':
