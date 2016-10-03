@@ -1,5 +1,3 @@
-"""Usabilla API Python Client."""
-
 # Copyright (c) 2016 Usabilla.com
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
@@ -74,7 +72,7 @@ class APIClient(object):
     """
 
     resources = {
-    'scopes' : {
+        'scopes' : {
             'live': {
                 'products': {
                     'websites': {
@@ -104,23 +102,23 @@ class APIClient(object):
             }
         }
     }
-    
+
     """ Scope constants """
     SCOPE_LIVE = 'live'
-    
+
     """ Product contants """
     PRODUCT_WEBSITES = 'websites'
     PRODUCT_EMAIL = 'email'
     PRODUCT_APPS = 'apps'
-    
+
     """ Resource contants """
     RESOURCE_FEEDBACK = 'feedback'
     RESOURCE_APP = 'app'
     RESOURCE_BUTTON = 'button'
-    RESOURCE_CAMPAIGN = 'campaign'    
+    RESOURCE_CAMPAIGN = 'campaign'
     RESOURCE_CAMPAIGN_RESULT = 'campaign_result'
     RESOURCE_CAMPAIGN_STATS = 'campaign_stats'
-    RESOURCE_INPAGE = 'inpage'    
+    RESOURCE_INPAGE = 'inpage'
     RESOURCE_INPAGE_RESULT = 'inpage_result'
 
     method = 'GET'
@@ -148,7 +146,7 @@ class APIClient(object):
         :param parameters: A `dict` representing the query parameters to be used for the request.
         :type parameters: dict
         """
-        
+
         self.query_parameters = urllib.urlencode(OrderedDict(sorted(parameters.items())))
 
     def get_query_parameters(self):
@@ -169,7 +167,7 @@ class APIClient(object):
         :type scope: str
 
         :returns: A `dict` of the data.
-        :rtype: dict 
+        :rtype: dict
         """
         if self.credentials.client_key is None or self.credentials.secret_key is None:
             raise GeneralError('Invalid Access Key.', 'The Access Key supplied is invalid.')
@@ -194,7 +192,7 @@ class APIClient(object):
 
         # Create payload hash (hash of the request body content).
         payload_hash = hashlib.sha256(''.encode('utf-8')).hexdigest()
-        
+
         # Combine elements to create canonical request.
         canonical_request = '{method}\n{uri}\n{query}\n{can_headers}\n{signed_headers}\n{hash}'.format(
             method=self.method,
@@ -234,52 +232,52 @@ class APIClient(object):
         )
 
         headers = {'date': usbldate, 'Authorization': authorization_header}
-        
+
         # Send the request.
-        request_url = self.host + scope + '?' + canonical_querystring        
+        request_url = self.host + scope + '?' + canonical_querystring
         r = requests.get(self.host_protocol + request_url, headers=headers)
-        
-       
+
+
         if r.status_code != 200:
             return r
         else:
             return r.json()
-            
 
-    def check_resource_validity(self,scope,product,resource):
-        """Checks whether the resource exists 
-        
+
+    def check_resource_validity(self, scope, product, resource):
+        """Checks whether the resource exists
+
         :param scope: A `string` that specifies the resource scope
         :param product: A `string` that specifies the product type
         :param resource: A `string` that specifies the resource type
-        
+
         :type scope: str
         :type product: str
         :type resource: str
-        
+
         :returns: An `string` that represents the resource request url
         :rtype: string
         """
         if scope not in self.resources['scopes'].keys():
             raise GeneralError('invalid scope', 'Invalid scope name')
         if product not in self.resources['scopes'][scope]['products'].keys():
-            raise GeneralError('invalid product', 'Invalid product name')            
+            raise GeneralError('invalid product', 'Invalid product name')
         if resource not in self.resources['scopes'][scope]['products'][product]['resources'].keys():
-            raise GeneralError('invalid resource', 'Invalid resource name')    
-        
+            raise GeneralError('invalid resource', 'Invalid resource name')
+
         url = '/' + scope + '/' + product + self.resources['scopes'][scope]['products'][product]['resources'][resource]
-        
+
         return url
-        
-    def handle_id(self,url,resource_id):
+
+    def handle_id(self, url, resource_id):
         """Replaces the :id pattern in the url
-        
+
         :param url: A `string` that specifies the resource request url
         :param resource_id: A `string` that specifies the resource id
-        
+
         :type url: str
         :type resource_id: str
-        
+
         :returns: An `string` that represents the resource request url
         :rtype: string
         """
@@ -288,18 +286,18 @@ class APIClient(object):
                 raise GeneralError('invalid id', 'Invalid resource ID')
             if resource_id == '*':
                resource_id = '%2A'
-    
+
             url = url.replace(':id', str(resource_id))
-           
+
         return url
-            
+
     def item_iterator(self, url):
         """Get items using an iterator.
-        
+
         :param url: A `string` that specifies the resource request url
-        
+
         :type url: str
-        
+
         :returns: An `generator` that yeilds the requested data.
         :rtype: generator
         """
@@ -313,32 +311,29 @@ class APIClient(object):
                 self.set_query_parameters({'since': results['lastTimestamp']})
             except:
                 return
-        
-        
+
+
     def get_resource(self, scope, product, resource, resource_id=None, iterate=False):
         """Retrieves resources of the specified type
-        
+
         :param scope: A `string` that specifies the resource scope
         :param product: A `string` that specifies the product type
         :param resource: A `string` that specifies the resource type
         :param resource_id: A `string` that specifies the resource id
-        :param iterate: A `boolean` that specifies whether the you want to use an iterator    
-        
+        :param iterate: A `boolean` that specifies whether the you want to use an iterator
+
         :type scope: str
         :type product: str
         :type resource: str
         :type resource_id: str
-        :type iterate: bool        
-        
+        :type iterate: bool
+
         :returns: An `generator` that yeilds the requested data or a single resource
         :rtype: generator or single resource
         """
         url = self.handle_id(self.check_resource_validity(scope, product, resource), resource_id)
-                
+
         if iterate:
             return self.item_iterator(url)
         else:
             return self.send_signed_request(url)
-
-
-    
