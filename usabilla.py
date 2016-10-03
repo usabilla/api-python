@@ -74,7 +74,7 @@ class APIClient(object):
     """
 
     resources = {
-    'scopes' : {
+        'scopes' : {
             'live': {
                 'products': {
                     'websites': {

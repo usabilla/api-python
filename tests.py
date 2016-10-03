@@ -87,6 +87,15 @@ class TestClient(TestCase):
         self.client.set_query_parameters(params)
         self.assertEqual(self.client.get_query_parameters(), 'limit=1&since=1235454')
 
+    def test_check_resource_validity(self):
+        with self.assertRaises(ub.GeneralError):
+            self.client.check_resource_validity('nonexisting', 'nonexisting', 'nonexisting')
+        with self.assertRaises(ub.GeneralError):
+            self.client.check_resource_validity('live', 'nonexisting', 'nonexisting')
+        with self.assertRaises(ub.GeneralError):
+            self.client.check_resource_validity('live', 'websites', 'nonexisting')
+        self.assertEqual(self.client.check_resource_validity('live', 'websites', 'button'), '/live/websites/button')
+
 
 if __name__ == '__main__':
     unittest_main()
