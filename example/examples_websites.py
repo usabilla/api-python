@@ -1,6 +1,5 @@
 """Examples Usabilla for Websites"""
 
-import pprint
 import usabilla as ub
 
 if __name__ == '__main__':
@@ -17,7 +16,7 @@ if __name__ == '__main__':
     print len([item for item in feedback_items])
 
     # ---------------------------------------
-	# Get all campaigns for this account
+    # Get all campaigns for this account
     campaigns = api.get_resource(api.SCOPE_LIVE, api.PRODUCT_WEBSITES, api.RESOURCE_CAMPAIGN)
     first_campaign = campaigns['items'][0]
     print first_campaign['name']
@@ -33,3 +32,4 @@ if __name__ == '__main__':
 
     # ---------------------------------------
     # in-page is not yet available
+    
