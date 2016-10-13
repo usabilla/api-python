@@ -34,11 +34,11 @@ Requires Python 2.7
 pip install usabilla-api
 ```
 
-## Examples:
+## Examples
 The example folder contains an  example of the client, which gives an idea how the client can be used and what is possible.
 
 
-## Iterators
+###Iterators
 
 When working with the <code>limit</code> parameters (default value is **100**) you can request resources using the <code>item_iterator()</code> function.
 The API returns data in pages. This function returns a [Generator](https://wiki.python.org/moin/Generators) which
