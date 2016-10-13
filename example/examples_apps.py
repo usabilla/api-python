@@ -27,4 +27,3 @@ if __name__ == '__main__':
     # Get the feedback of the first app form
     feedback = api.get_resource(api.SCOPE_LIVE, api.PRODUCT_APPS, api.RESOURCE_FEEDBACK, first_form['id'], iterate=True)
     print len([item for item in feedback])
-    
