@@ -6,7 +6,7 @@ if __name__ == '__main__':
     # Create an API client with access key and secret key
     api = ub.APIClient('YOUR-ACCESS-KEY', 'YOUR-SECRET-KEY')
 
-	# Get all buttons for this account
+    # Get all buttons for this account
     buttons = api.get_resource(api.SCOPE_LIVE, api.PRODUCT_WEBSITES,api.RESOURCE_BUTTON)
     first_button = buttons['items'][0]
     print first_button['name']
