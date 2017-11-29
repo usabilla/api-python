@@ -95,7 +95,9 @@ class APIClient(object):
                     'apps': {
                         'resources' : {
                             'app': '',
-                            'feedback': '/:id/feedback'
+                            'feedback': '/:id/feedback',
+                            'campaign': '/campaign',
+                            'campaign_result': '/campaign/:id/results'
                         }
                     }
                 }
