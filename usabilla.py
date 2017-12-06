@@ -239,7 +239,6 @@ class APIClient(object):
         request_url = self.host + scope + '?' + canonical_querystring
         r = requests.get(self.host_protocol + request_url, headers=headers)
 
-
         if r.status_code != 200:
             return r
         else:
@@ -262,14 +261,15 @@ class APIClient(object):
         """
         if scope not in self.resources['scopes'].keys():
             raise GeneralError('invalid scope', 'Invalid scope name')
-        if product not in self.resources['scopes'][scope]['products'].keys():
+        found_scope = self.resources['scopes'][scope]
+        if product not in found_scope['products'].keys():
             raise GeneralError('invalid product', 'Invalid product name')
-        if resource not in self.resources['scopes'][scope]['products'][product]['resources'].keys():
+        found_product = found_scope['products'][product]
+        if resource not in found_product['resources'].keys():
             raise GeneralError('invalid resource', 'Invalid resource name')
+        found_resource = found_product['resources'][resource]
 
-        url = '/' + scope + '/' + product + self.resources['scopes'][scope]['products'][product]['resources'][resource]
-
-        return url
+        return '/%s/%s%s' % (scope, product, found_resource)
 
     def handle_id(self, url, resource_id):
         """Replaces the :id pattern in the url
