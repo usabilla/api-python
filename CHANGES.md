@@ -3,6 +3,11 @@ Changelog
 
 Here you find a full list of changes.
 
+Version 1.3.0
+-------------
+
+- Add support for Campaigns for Apps
+
 Version 1.2.3
 -------------
 

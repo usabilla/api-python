@@ -1,3 +1,4 @@
+import logging
 import sys
 import unittest
 import usabilla as ub
@@ -6,9 +7,8 @@ from mock import Mock
 from unittest import TestCase, main as unittest_main
 
 
-import logging
-
 logging.basicConfig(level=logging.DEBUG)
+
 
 class TestCredentials(TestCase):
 
@@ -66,17 +66,14 @@ class TestClient(TestCase):
         self.assertEqual(self.client.host_protocol, 'https://')
         self.assertEqual('',self.client.query_parameters)
 
-
     def test_sign_key(self):
         signed_key = self.client.sign(self.secret_key.encode('utf-8'), 'usbl1_request'.encode('utf-8'))
         self.assertEqual(signed_key,  b"&-\x88\x80Z9\xe8Pnvx\xe4S\xeeZ\x9fG\xc5\xf7g\x11|\xc1\xaa~q(\xef\xaf\x95\xc0\xac")
-
 
     def test_get_signature_key(self):
         datestamp = '20150115'
         signing_key = self.client.get_signature_key(self.secret_key, datestamp)
         self.assertEqual(signing_key, b"\x15\x8d\xd7U\xceG\xdeH\x8aHwU\xf5qg\xae\xd4Z\x19`\xedM\x80\x87\x97V\xbf\xe9pw\xaa\xae")
-
 
     def test_query_parameters(self):
         params = {'limit': 1}
@@ -88,12 +85,32 @@ class TestClient(TestCase):
 
     def test_check_resource_validity(self):
         with self.assertRaises(ub.GeneralError):
-            self.client.check_resource_validity('nonexisting', 'nonexisting', 'nonexisting')
+            self.client.check_resource_validity(
+                'nonexisting',
+                'nonexisting',
+                'nonexisting')
         with self.assertRaises(ub.GeneralError):
-            self.client.check_resource_validity('live', 'nonexisting', 'nonexisting')
+            self.client.check_resource_validity(
+                'live',
+                'nonexisting',
+                'nonexisting')
         with self.assertRaises(ub.GeneralError):
-            self.client.check_resource_validity('live', 'websites', 'nonexisting')
-        self.assertEqual(self.client.check_resource_validity('live', 'websites', 'button'), '/live/websites/button')
+            self.client.check_resource_validity(
+                'live',
+                'websites',
+                'nonexisting')
+        self.assertEqual(
+            self.client.check_resource_validity('live', 'websites', 'button'),
+            '/live/websites/button')
+        self.assertEqual(
+            self.client.check_resource_validity('live', 'apps', 'campaign'),
+            '/live/apps/campaign')
+        self.assertEqual(
+            self.client.check_resource_validity(
+                'live',
+                'apps',
+                'campaign_result'),
+            '/live/apps/campaign/:id/results')
 
     def test_handle_id(self):
         url = '/live/websites/button/:id/feedback'

@@ -10,7 +10,7 @@ if __name__ == '__main__':
 
     # Set the limit of buttons to retrieve to 1
     if False:
-    	api.set_query_parameters({'limit': 1})
+        api.set_query_parameters({'limit': 1})
 
     # Set a limit for last 7 days
     if False:
@@ -25,5 +25,24 @@ if __name__ == '__main__':
     print first_form['name']
 
     # Get the feedback of the first app form
-    feedback = api.get_resource(api.SCOPE_LIVE, api.PRODUCT_APPS, api.RESOURCE_FEEDBACK, first_form['id'], iterate=True)
+    feedback = api.get_resource(
+        api.SCOPE_LIVE,
+        api.PRODUCT_APPS,
+        api.RESOURCE_FEEDBACK,
+        first_form['id'],
+        iterate=True)
     print len([item for item in feedback])
+
+    # Campaigns for apps
+    app_campaigns = api.get_resource(
+        api.SCOPE_LIVE,
+        api.PRODUCT_APPS,
+        api.RESOURCE_CAMPAIGN)
+    first_campaign = app_campaigns['items'][0]
+    responses = api.get_resource(
+        api.SCOPE_LIVE,
+        api.PRODUCT_APPS,
+        api.RESOURCE_CAMPAIGN_RESULT,
+        first_campaign['id'],
+        iterate=True)
+    print len([item for item in responses])
