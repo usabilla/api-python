@@ -72,11 +72,11 @@ class APIClient(object):
     """
 
     resources = {
-        'scopes' : {
+        'scopes': {
             'live': {
                 'products': {
                     'websites': {
-                        'resources' : {
+                        'resources': {
                             'button': '/button',
                             'feedback': '/button/:id/feedback',
                             'campaign': '/campaign',
@@ -87,13 +87,13 @@ class APIClient(object):
                         }
                     },
                     'email': {
-                        'resources' : {
+                        'resources': {
                             'button': '/button',
                             'feedback': '/button/:id/feedback'
                         }
                     },
                     'apps': {
-                        'resources' : {
+                        'resources': {
                             'app': '',
                             'feedback': '/:id/feedback',
                             'campaign': '/campaign',
@@ -238,12 +238,9 @@ class APIClient(object):
         # Send the request.
         request_url = self.host + scope + '?' + canonical_querystring
         r = requests.get(self.host_protocol + request_url, headers=headers)
+        r.raise_for_status()
 
-        if r.status_code != 200:
-            return r
-        else:
-            return r.json()
-
+        return r.json()
 
     def check_resource_validity(self, scope, product, resource):
         """Checks whether the resource exists
@@ -287,7 +284,7 @@ class APIClient(object):
             if resource_id == '':
                 raise GeneralError('invalid id', 'Invalid resource ID')
             if resource_id == '*':
-               resource_id = '%2A'
+                resource_id = '%2A'
 
             url = url.replace(':id', str(resource_id))
 
@@ -300,20 +297,17 @@ class APIClient(object):
 
         :type url: str
 
-        :returns: An `generator` that yeilds the requested data.
+        :returns: A `generator` that yields the requested data.
         :rtype: generator
+        :raises requests.exceptions.HTTPError: if an HTTP error occurred
         """
         has_more = True
         while has_more:
-            try:
-                results = self.send_signed_request(url)
-                has_more = results['hasMore']
-                for item in results['items']:
-                    yield item
-                self.set_query_parameters({'since': results['lastTimestamp']})
-            except:
-                return
-
+            results = self.send_signed_request(url)
+            has_more = results['hasMore']
+            for item in results['items']:
+                yield item
+            self.set_query_parameters({'since': results['lastTimestamp']})
 
     def get_resource(self, scope, product, resource, resource_id=None, iterate=False):
         """Retrieves resources of the specified type
@@ -330,7 +324,7 @@ class APIClient(object):
         :type resource_id: str
         :type iterate: bool
 
-        :returns: An `generator` that yeilds the requested data or a single resource
+        :returns: A `generator` that yields the requested data or a single resource
         :rtype: generator or single resource
         """
         url = self.handle_id(self.check_resource_validity(scope, product, resource), resource_id)

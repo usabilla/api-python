@@ -1,6 +1,5 @@
 import logging
-import sys
-import unittest
+import requests
 import usabilla as ub
 
 from mock import Mock
@@ -64,16 +63,18 @@ class TestClient(TestCase):
         self.assertEqual(self.client.method, 'GET')
         self.assertEqual(self.client.host, 'data.usabilla.com')
         self.assertEqual(self.client.host_protocol, 'https://')
-        self.assertEqual('',self.client.query_parameters)
+        self.assertEqual('', self.client.query_parameters)
 
     def test_sign_key(self):
         signed_key = self.client.sign(self.secret_key.encode('utf-8'), 'usbl1_request'.encode('utf-8'))
-        self.assertEqual(signed_key,  b"&-\x88\x80Z9\xe8Pnvx\xe4S\xeeZ\x9fG\xc5\xf7g\x11|\xc1\xaa~q(\xef\xaf\x95\xc0\xac")
+        self.assertEqual(
+            signed_key,  b"&-\x88\x80Z9\xe8Pnvx\xe4S\xeeZ\x9fG\xc5\xf7g\x11|\xc1\xaa~q(\xef\xaf\x95\xc0\xac")
 
     def test_get_signature_key(self):
         datestamp = '20150115'
         signing_key = self.client.get_signature_key(self.secret_key, datestamp)
-        self.assertEqual(signing_key, b"\x15\x8d\xd7U\xceG\xdeH\x8aHwU\xf5qg\xae\xd4Z\x19`\xedM\x80\x87\x97V\xbf\xe9pw\xaa\xae")
+        self.assertEqual(
+            signing_key, b"\x15\x8d\xd7U\xceG\xdeH\x8aHwU\xf5qg\xae\xd4Z\x19`\xedM\x80\x87\x97V\xbf\xe9pw\xaa\xae")
 
     def test_query_parameters(self):
         params = {'limit': 1}
@@ -131,9 +132,9 @@ class TestClient(TestCase):
             index += 1
         self.client.set_query_parameters.assert_called_with({'since': 1400000000002})
         self.assertEqual(self.client.send_signed_request.call_count, 2)
-        self.client.send_signed_request.side_effect = ub.GeneralError('mocked', 'error')
-        for item in self.client.item_iterator('/some/url'):
-            raise ub.GeneralError('should not', 'come here')
+        self.client.send_signed_request.side_effect = requests.exceptions.HTTPError('mocked error')
+        with self.assertRaises(requests.exceptions.HTTPError):
+            list(self.client.item_iterator('/some/url'))
 
     def test_get_resource(self):
         self.client.item_iterator = Mock()
