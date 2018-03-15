@@ -3,6 +3,11 @@ Changelog
 
 Here you find a full list of changes.
 
+Version 2.0.0
+-------------
+
+- Raise HTTPError instead of returning Response
+
 Version 1.3.0
 -------------
 
