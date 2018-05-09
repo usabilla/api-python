@@ -3,6 +3,11 @@ Changelog
 
 Here you find a full list of changes.
 
+Version 2.0.1
+-------------
+
+- Reuse HTTP connections between requests
+
 Version 2.0.0
 -------------
 

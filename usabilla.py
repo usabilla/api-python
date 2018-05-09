@@ -127,6 +127,8 @@ class APIClient(object):
     host = 'data.usabilla.com'
     host_protocol = 'https://'
 
+    session = requests.Session()
+
     def __init__(self, client_key, secret_key):
         """Initialize an APIClient object."""
         self.query_parameters = ''
@@ -237,7 +239,7 @@ class APIClient(object):
 
         # Send the request.
         request_url = self.host + scope + '?' + canonical_querystring
-        r = requests.get(self.host_protocol + request_url, headers=headers)
+        r = self.session.get(self.host_protocol + request_url, headers=headers)
         r.raise_for_status()
 
         return r.json()
