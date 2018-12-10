@@ -13,6 +13,7 @@ if __name__ == '__main__':
         api.set_query_parameters({'limit': 1})
 
     # Set a limit for last 7 days
+    # NB: You might need to convert the since_unix calculation from scientific notation or set the since parameter manually
     if False:
         epoch = datetime(1970, 1, 1)
         since = timedelta(days=7)
