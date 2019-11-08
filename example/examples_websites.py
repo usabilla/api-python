@@ -31,4 +31,13 @@ if __name__ == '__main__':
 
 
     # ---------------------------------------
+    
     # in-page is not yet available
+    # Get all In - Page Widgets for this account
+    widgets = api.get_resource(api.SCOPE_LIVE, api.PRODUCT_WEBSITES, api.RESOURCE_INPAGE)
+    
+    print(widgets)
+
+    # Get one specific widget
+    specific_widget = widgets['items'][1]
+    print(specific_widget)
