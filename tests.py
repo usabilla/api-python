@@ -1,4 +1,5 @@
 import logging
+from unittest.mock import call
 import requests
 import usabilla as ub
 
@@ -124,17 +125,39 @@ class TestClient(TestCase):
         items = ['one', 'two', 'three', 'four']
         has_more = {'hasMore': True, 'items': items[:2], 'lastTimestamp': 1400000000001}
         no_more = {'hasMore': False, 'items': items[2:], 'lastTimestamp': 1400000000002}
+        expected_set_query_parameters_calls = [ call({'since': 1400000000001}), call({'since': 1400000000002}), call({}) ]
+
         self.client.set_query_parameters = Mock()
         self.client.send_signed_request = Mock(side_effect=[has_more, no_more])
+
         index = 0
         for item in self.client.item_iterator('/some/url'):
             self.assertEqual(item, items[index])
             index += 1
-        self.client.set_query_parameters.assert_called_with({'since': 1400000000002})
+
+        self.assertEqual(self.client.set_query_parameters.call_args_list, expected_set_query_parameters_calls)
         self.assertEqual(self.client.send_signed_request.call_count, 2)
+
         self.client.send_signed_request.side_effect = requests.exceptions.HTTPError('mocked error')
         with self.assertRaises(requests.exceptions.HTTPError):
             list(self.client.item_iterator('/some/url'))
+
+    def test_item_iterator_resets_query_parameters_after_returning_all_items(self):
+        first_response = {'hasMore': True, 'items': [1], 'lastTimestamp': 1400000000001}
+        second_response = {'hasMore': False, 'items': [2], 'lastTimestamp': 1400000000002}
+        third_response = {'hasMore': False, 'items': [3], 'lastTimestamp': 1400000000003}
+
+        self.client.send_signed_request = Mock(side_effect=[first_response, second_response, third_response])
+
+        expected_query_parameters = ['', 'since=1400000000001', '']
+
+        index = 0
+        for response in [self.client.item_iterator('/some/url'), self.client.item_iterator('/some/url')]:
+            for _ in response:
+                self.assertEqual(expected_query_parameters[index], self.client.get_query_parameters())
+                index+=1
+
+        self.assertEqual(self.client.send_signed_request.call_count, 3)
 
     def test_get_resource(self):
         self.client.item_iterator = Mock()

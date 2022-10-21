@@ -311,6 +311,8 @@ class APIClient(object):
                 yield item
             self.set_query_parameters({'since': results['lastTimestamp']})
 
+        self.set_query_parameters({})
+
     def get_resource(self, scope, product, resource, resource_id=None, iterate=False):
         """Retrieves resources of the specified type
 
