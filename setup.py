@@ -3,7 +3,7 @@ try:
 except ImportError:
     from distutils.core import setup
 
-VERSION = '2.0.1'
+VERSION = '2.0.2'
 
 setup(
     name='usabilla-api',
