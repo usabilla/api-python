@@ -1,12 +1,16 @@
 Changelog
 =========
+Here you find a full list of changes.
+
+Version 2.0.3
+-------------
+
+- Add support for Campaign Result Schema endpoint
 
 Version 2.0.2
 -------------
 
 - Reset query arguments after returning all items from generator
-
-Here you find a full list of changes.
 
 Version 2.0.1
 -------------
