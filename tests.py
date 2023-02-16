@@ -113,6 +113,12 @@ class TestClient(TestCase):
                 'apps',
                 'campaign_result'),
             '/live/apps/campaign/:id/results')
+        self.assertEqual(
+            self.client.check_resource_validity(
+                'live',
+                'apps',
+                'campaign_result_schema'),
+            '/live/apps/campaign/:id/results/schema')
 
     def test_handle_id(self):
         url = '/live/websites/button/:id/feedback'
@@ -166,6 +172,8 @@ class TestClient(TestCase):
         self.client.send_signed_request.assert_called_with('/live/websites/button/42/feedback')
         self.client.get_resource('live', 'websites', 'button', None, True)
         self.client.item_iterator.assert_called_with('/live/websites/button')
+        self.client.get_resource('live', 'apps', 'campaign_result_schema', 42)
+        self.client.send_signed_request.assert_called_with('/live/apps/campaign/42/results/schema')
 
 
 if __name__ == '__main__':

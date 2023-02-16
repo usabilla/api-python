@@ -97,7 +97,8 @@ class APIClient(object):
                             'app': '',
                             'feedback': '/:id/feedback',
                             'campaign': '/campaign',
-                            'campaign_result': '/campaign/:id/results'
+                            'campaign_result': '/campaign/:id/results',
+                            'campaign_result_schema': '/campaign/:id/results/schema'
                         }
                     }
                 }
@@ -120,6 +121,7 @@ class APIClient(object):
     RESOURCE_CAMPAIGN = 'campaign'
     RESOURCE_CAMPAIGN_RESULT = 'campaign_result'
     RESOURCE_CAMPAIGN_STATS = 'campaign_stats'
+    RESOURCE_CAMPAIGN_RESULT_SCHEMA = 'campaign_result_schema'
     RESOURCE_INPAGE = 'inpage'
     RESOURCE_INPAGE_RESULT = 'inpage_result'
 
