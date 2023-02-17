@@ -1,6 +1,6 @@
 coverage==4.0.3
 python-coveralls==2.7.0
-PyYAML==4.2b1
+PyYAML==5.4
 requests==2.20.0
 sh==1.11
 six==1.10.0
