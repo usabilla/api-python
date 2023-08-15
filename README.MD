@@ -53,3 +53,12 @@ traverses these pages for you and yields each result in the current page before 
 ## Support
 
 The Usabilla Python Client API is maintained by Usabilla Development Team. Everyone is encouraged to file bug reports, feature requests, and pull requests through GitHub. This input is critical and will be carefully considered, but we can’t promise a specific resolution or time frame for any request. For more information please email our Support Team at support@usabilla.com.
+
+## Releasing [internal]
+
+In order to release a new version of this library, follow these steps:
+- bump version in setup.py
+- merge and tag the new release with `v<versio>`
+- run `python -m build`
+- upload release to pypi-test: `python -m twine upload --repository testpypi dist/*`
+- upload release to pypi: `python -m twine upload --repository pypi dist/*`
