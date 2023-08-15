@@ -10,7 +10,7 @@ setup(
     version=VERSION,
     description="Python client for Usabilla API",
     license='MIT',
-    install_requires=['urllib3', 'requests'],
+    install_requires=['requests'],
     packages=find_packages(),
     py_modules=['usabilla'],
     author='Usabilla',
