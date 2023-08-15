@@ -84,6 +84,9 @@ class TestClient(TestCase):
         params = {'limit': 1, 'since': 1235454}
         self.client.set_query_parameters(params)
         self.assertEqual(self.client.get_query_parameters(), 'limit=1&since=1235454')
+        params = {'limit': 1, 'since': 1235454, 'text': 'the little old lady'}
+        self.client.set_query_parameters(params)
+        self.assertEqual(self.client.get_query_parameters(), 'limit=1&since=1235454&text=the+little+old+lady')
 
     def test_check_resource_validity(self):
         with self.assertRaises(ub.GeneralError):
