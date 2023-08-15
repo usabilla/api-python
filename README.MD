@@ -33,7 +33,8 @@ For more information on resources, authorization and available API calls, please
 
 ## Installation:
 
-Requires Python 2.7
+Requires Python 3. 
+Support for Python 2.7 is expected but not tested or validated.
 
 ```bash
 pip install usabilla-api
