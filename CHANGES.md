@@ -2,6 +2,13 @@ Changelog
 =========
 Here you find a full list of changes.
 
+
+Version 2.0.4
+-------------
+
+- Remove usage of urllib3 which was restricted to v1 in favor of embedded urllib to simplify our dependencies
+- Update dependencies
+
 Version 2.0.3
 -------------
 
