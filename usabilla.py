@@ -22,7 +22,7 @@ import datetime
 import hashlib
 import hmac
 import requests
-import urllib3.request as urllib
+import urllib.parse
 
 from collections import OrderedDict
 
@@ -153,7 +153,7 @@ class APIClient(object):
         :type parameters: dict
         """
 
-        self.query_parameters = urllib.urlencode(OrderedDict(sorted(parameters.items())))
+        self.query_parameters = urllib.parse.urlencode(OrderedDict(sorted(parameters.items())))
 
     def get_query_parameters(self):
         """Get the query parameters."""
